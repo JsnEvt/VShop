@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using VShop.ProductApi.Models;
 
 namespace VShop.ProductApi.DTOs
@@ -23,8 +24,13 @@ namespace VShop.ProductApi.DTOs
         [Range(1, 999)]
         public long Stock { get; set; }
         public string? ImageURL { get; set; }
+
+        public string? CategoryName { get; set; }
         //Existe uma relacao da classe Category com produtos entao,
         //faz=-se necessario a adicao de um atributo aqui:
+
+        //Nesta classe, Category e uma propriedade de navegacao, portanto, pode ser ignorada na serializacao:
+        [JsonIgnore]
         public Category? Category { get; set; }
         //para tornar mais explicito, informa-se a linha abaixo:
         public int CategoryId { get; set; }
