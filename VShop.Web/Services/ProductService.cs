@@ -1,8 +1,9 @@
 ﻿using System.Text;
 using System.Text.Json;
 using VShop.Web.Models;
+using VShop.Web.Services.Contracts;
 
-namespace VShop.Web.Services.Contracts
+namespace VShop.Web.Services
 {
     public class ProductService : IProductService
     {
@@ -76,7 +77,7 @@ namespace VShop.Web.Services.Contracts
                 }
             }
             return productVM;
-    }
+        }
 
 
         public async Task<ProductViewModel> UpdateProduct(ProductViewModel productVM)
@@ -105,7 +106,7 @@ namespace VShop.Web.Services.Contracts
             var client = _clientFactory.CreateClient("ProductApi");
             using (var response = await client.DeleteAsync(apiEndpoint + id))
             {
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     return true;
                 }

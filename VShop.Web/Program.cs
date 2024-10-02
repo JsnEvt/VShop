@@ -1,3 +1,4 @@
+using VShop.Web.Services;
 using VShop.Web.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddHttpClient("ProductApi", c =>
 });
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
