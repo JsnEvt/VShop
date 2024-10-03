@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{BD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{EDF42149-4DC2-4C31-95E2-9B9D862953B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VShop.IdentityServer", "VShop.IdentityServer\VShop.IdentityServer.csproj", "{C608B6F3-BDA0-4098-BC2D-F7FFB4573565}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VShop.IdentityServer", "VShop.IdentityServer\VShop.IdentityServer.csproj", "{C608B6F3-BDA0-4098-BC2D-F7FFB4573565}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
