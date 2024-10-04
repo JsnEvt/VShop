@@ -347,8 +347,8 @@ namespace IdentityServerHost.Quickstart.UI
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider)
                 {
-                    var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp);
-                    if (providerSupportsSignout)
+                    //var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp);
+                    //if (providerSupportsSignout)
                     {
                         if (vm.LogoutId == null)
                         {
