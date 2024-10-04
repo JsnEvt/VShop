@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using VShop.IdentityServer.Configuration;
 using VShop.IdentityServer.Data;
+using VShop.IdentityServer.SeedDatabase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,7 @@ var builderIdentityServer = builder.Services.AddIdentityServer(options =>
         .AddAspNetIdentity<ApplicationUser>();
 
 builderIdentityServer.AddDeveloperSigningCredential();
+builder.Services.AddScoped<IDatabaseSeedInitializer, DatabaseIdentityServerInitializer>();
 
 var app = builder.Build();
 
@@ -49,8 +51,24 @@ app.UseIdentityServer();
 
 app.UseAuthorization();
 
+SeedDatabaseIdentityServer(app);
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+//ja inicializar criando os elementos do seed:
+void SeedDatabaseIdentityServer(IApplicationBuilder app)
+{
+    using (var serviceScope = app.ApplicationServices.CreateScope())
+    {
+        //as linhas 69 e 70 e para criar as instancias do servico para logo apos, 
+        //chamar os metodos.
+        var initRolesUsers = serviceScope.ServiceProvider
+            .GetService<IDatabaseSeedInitializer>();
+            initRolesUsers.InitializeSeedRoles();
+            initRolesUsers.InitializeSeedUsers();
+    }
+}
