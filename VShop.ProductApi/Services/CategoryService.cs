@@ -18,42 +18,91 @@ namespace VShop.ProductApi.Services
 
         public async Task<IEnumerable<CategoryDTO>> GetCategories()
         {
-            var categoriesEntity = await _categoryRepository.GetAll();
-            return _mapper.Map<IEnumerable<CategoryDTO>>(categoriesEntity);
+            try
+            {
+                var categoriesEntity = await _categoryRepository.GetAll();
+                return _mapper.Map<IEnumerable<CategoryDTO>>(categoriesEntity);
+            }
+            catch (Exception ex)
+            {
+                // Lógica de log pode ser adicionada aqui
+                throw new Exception($"Erro ao obter categorias: {ex.Message}", ex);
+            }
         }
-
 
         public async Task<IEnumerable<CategoryDTO>> GetCategoriesProducts()
         {
-            var categoriesEntity = await _categoryRepository.GetCategpriesProducts();
-            return _mapper.Map<IEnumerable<CategoryDTO>>(categoriesEntity) ;
+            try
+            {
+                var categoriesEntity = await _categoryRepository.GetCategpriesProducts();
+                return _mapper.Map<IEnumerable<CategoryDTO>>(categoriesEntity);
+            }
+            catch (Exception ex)
+            {
+                // Lógica de log pode ser adicionada aqui
+                throw new Exception($"Erro ao obter categorias com produtos: {ex.Message}", ex);
+            }
         }
 
         public async Task<CategoryDTO> GetCategoryById(int id)
         {
-            var categoryEntity = await _categoryRepository.GetById(id);
-            return _mapper.Map<CategoryDTO>(categoryEntity);
+            try
+            {
+                var categoryEntity = await _categoryRepository.GetById(id);
+                return _mapper.Map<CategoryDTO>(categoryEntity);
+            }
+            catch (Exception ex)
+            {
+                // Lógica de log pode ser adicionada aqui
+                throw new Exception($"Erro ao obter categoria com ID {id}: {ex.Message}", ex);
+            }
         }
 
         public async Task AddCategory(CategoryDTO categoryDto)
         {
-            var categoryEntity = _mapper.Map<Category>(categoryDto);
-            await _categoryRepository.Create(categoryEntity);
-            categoryDto.CategoryId = categoryEntity.CategoryId;
+            try
+            {
+                var categoryEntity = _mapper.Map<Category>(categoryDto);
+                await _categoryRepository.Create(categoryEntity);
+                categoryDto.CategoryId = categoryEntity.CategoryId;
+            }
+            catch (Exception ex)
+            {
+                // Lógica de log pode ser adicionada aqui
+                throw new Exception($"Erro ao adicionar categoria: {ex.Message}", ex);
+            }
         }
 
         public async Task UpdateCategory(CategoryDTO categoryDto)
         {
-            var categoryEntity = _mapper.Map<Category>(categoryDto);
-            await _categoryRepository.Update(categoryEntity);
+            try
+            {
+                var categoryEntity = _mapper.Map<Category>(categoryDto);
+                await _categoryRepository.Update(categoryEntity);
+            }
+            catch (Exception ex)
+            {
+                // Lógica de log pode ser adicionada aqui
+                throw new Exception($"Erro ao atualizar categoria: {ex.Message}", ex);
+            }
         }
 
         public async Task RemoveCategory(int id)
         {
-            var categoryEntity = _categoryRepository.GetById(id).Result;
-            await _categoryRepository.Delete(categoryEntity.CategoryId);
+            try
+            {
+                var categoryEntity = await _categoryRepository.GetById(id);
+                if (categoryEntity == null)
+                {
+                    throw new Exception("Categoria não encontrada.");
+                }
+                await _categoryRepository.Delete(categoryEntity.CategoryId);
+            }
+            catch (Exception ex)
+            {
+                // Lógica de log pode ser adicionada aqui
+                throw new Exception($"Erro ao remover categoria: {ex.Message}", ex);
+            }
         }
-
-
     }
 }

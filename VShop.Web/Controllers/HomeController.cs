@@ -29,13 +29,29 @@ namespace VShop.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Login()
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var accessToken = await HttpContext.GetTokenAsync("access_token");
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro durante o login: {ex.Message}");
+                return View("Error");
+            }
         }
 
         public IActionResult Logout()
         {
-            return SignOut("Cookies", "oidc");
+            try
+            {
+                return SignOut("Cookies", "oidc");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro durante o logout: {ex.Message}");
+                return View("Error");
+            }
         }
     }
 }

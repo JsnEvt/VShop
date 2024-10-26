@@ -17,94 +17,141 @@ namespace VShop.Web.Controllers
         {
             _productService = productService;
             _categoryService = categoryService;
-
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductViewModel>>> Index()
         {
-            var result = await _productService.GetAllProducts();
+            try
+            {
+                var result = await _productService.GetAllProducts();
+                if (result is null)
+                    return View("Error");
 
-            if (result is null)
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao carregar produtos: {ex.Message}");
                 return View("Error");
-
-            return View(result);
+            }
         }
 
-        //O metodo abaixo servira para obter todas as categorias para preencher o campo "combobox"
-        //ele carregara o formulario e exibira as categorias que ja estao no banco de dados.
         [HttpGet]
         public async Task<IActionResult> CreateProduct()
         {
-            //ViewBag equivale ao comboBox
-            ViewBag.CategoryId = new SelectList(await
-                _categoryService.GetAllCategories(), "CategoryId", "Name");
-            return View();
+            try
+            {
+                ViewBag.CategoryId = new SelectList(await _categoryService.GetAllCategories(), "CategoryId", "Name");
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao carregar categorias para criação de produto: {ex.Message}");
+                return View("Error");
+            }
         }
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateProduct(ProductViewModel productVM)
         {
-            //IsValid = consultando os parametros de [Required]
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _productService.CreateProduct(productVM);
-                if (result != null)
-                    return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    var result = await _productService.CreateProduct(productVM);
+                    if (result != null)
+                        return RedirectToAction("Index");
+                }
+
+                ViewBag.CategoryId = new SelectList(await _categoryService.GetAllCategories(), "CategoryId", "Name");
+                return View(productVM);
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.CategoryId = new SelectList(await
-                    _categoryService.GetAllCategories(), "CategoryId", "Name");
+                Console.WriteLine($"Erro ao criar produto: {ex.Message}");
+                return View("Error");
             }
-            return View(productVM);
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateProduct(int id)
         {
-            ViewBag.CategoryId = new SelectList(await _categoryService.GetAllCategories(), "CategoryId", "Name");
-            
-            var result = await _productService.FindProductById(id);
+            try
+            {
+                ViewBag.CategoryId = new SelectList(await _categoryService.GetAllCategories(), "CategoryId", "Name");
 
-            if(result is null)
+                var result = await _productService.FindProductById(id);
+                if (result is null)
+                    return View("Error");
+
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao carregar produto para atualização: {ex.Message}");
                 return View("Error");
-            return View(result);
+            }
         }
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> UpdateProduct(ProductViewModel productVM)
         {
-            if(ModelState.IsValid) {
-                var result = await _productService.UpdateProduct(productVM);
-                if(result is not null)
-                    return RedirectToAction("Index");
-        }
-            return View(productVM);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await _productService.UpdateProduct(productVM);
+                    if (result is not null)
+                        return RedirectToAction("Index");
+                }
+                return View(productVM);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao atualizar produto: {ex.Message}");
+                return View("Error");
+            }
         }
 
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<ProductViewModel>> DeleteProduct(int id)
         {
-            var result = await _productService.FindProductById(id);
-            if(result is null)
-                return View("Error");
+            try
+            {
+                var result = await _productService.FindProductById(id);
+                if (result is null)
+                    return View("Error");
 
-            return View(result);
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao carregar produto para exclusão: {ex.Message}");
+                return View("Error");
+            }
         }
 
-        //ActionName e devido ao fato de dois metodos terem assinaturas iguais. Isso nao e permitido.
         [HttpPost, ActionName("DeleteProduct")]
         [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var result = await _productService.DeleteProductById(id);
-            if(!result)
+            try
+            {
+                var result = await _productService.DeleteProductById(id);
+                if (!result)
+                    return View("Error");
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao excluir produto: {ex.Message}");
                 return View("Error");
-            return RedirectToAction("Index");
+            }
         }
     }
 }

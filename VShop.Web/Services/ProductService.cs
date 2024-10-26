@@ -10,8 +10,6 @@ namespace VShop.Web.Services
         private readonly IHttpClientFactory _clientFactory;
         private const string apiEndpoint = "/api/products/";
         private readonly JsonSerializerOptions _options;
-        private ProductViewModel productVM;
-        private IEnumerable<ProductViewModel> productsVM;
 
         public ProductService(IHttpClientFactory clientFactory)
         {
@@ -21,98 +19,133 @@ namespace VShop.Web.Services
 
         public async Task<IEnumerable<ProductViewModel>> GetAllProducts()
         {
-            var client = _clientFactory.CreateClient("ProductApi");
-            using (var response = await client.GetAsync(apiEndpoint))
+            try
             {
-                if (response.IsSuccessStatusCode)
+                var client = _clientFactory.CreateClient("ProductApi");
+                using (var response = await client.GetAsync(apiEndpoint))
                 {
-                    var apiResponse = await response.Content.ReadAsStreamAsync();
-                    productsVM = await JsonSerializer
-                        .DeserializeAsync<IEnumerable<ProductViewModel>>(apiResponse, _options);
-                }
-                else
-                {
-                    return null;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var apiResponse = await response.Content.ReadAsStreamAsync();
+                        var productsVM = await JsonSerializer
+                            .DeserializeAsync<IEnumerable<ProductViewModel>>(apiResponse, _options);
+                        return productsVM;
+                    }
+                    else
+                    {
+                        return Enumerable.Empty<ProductViewModel>();
+                    }
                 }
             }
-            return productsVM;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao obter produtos: {ex.Message}");
+                return Enumerable.Empty<ProductViewModel>();
+            }
         }
 
         public async Task<ProductViewModel> FindProductById(int id)
         {
-            var client = _clientFactory.CreateClient("ProductApi");
-            using (var response = await client.GetAsync(apiEndpoint + id))
+            try
             {
-                if (response.IsSuccessStatusCode)
+                var client = _clientFactory.CreateClient("ProductApi");
+                using (var response = await client.GetAsync(apiEndpoint + id))
                 {
-                    var apiResponse = await response.Content.ReadAsStreamAsync();
-                    productVM = await JsonSerializer
-                        .DeserializeAsync<ProductViewModel>(apiResponse, _options);
-                }
-                else
-                {
-                    return null;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var apiResponse = await response.Content.ReadAsStreamAsync();
+                        var productVM = await JsonSerializer
+                            .DeserializeAsync<ProductViewModel>(apiResponse, _options);
+                        return productVM;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
-            return productVM;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao encontrar produto por ID: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<ProductViewModel> CreateProduct(ProductViewModel productVM)
         {
-            var client = _clientFactory.CreateClient("ProductApi");
-            StringContent content = new StringContent(JsonSerializer.Serialize(productVM),
-                                    Encoding.UTF8, "application/json");
-
-            using (var response = await client.PostAsync(apiEndpoint, content))
+            try
             {
-                if (response.IsSuccessStatusCode)
+                var client = _clientFactory.CreateClient("ProductApi");
+                StringContent content = new StringContent(JsonSerializer.Serialize(productVM),
+                                        Encoding.UTF8, "application/json");
+
+                using (var response = await client.PostAsync(apiEndpoint, content))
                 {
-                    var apiResponse = await response.Content.ReadAsStreamAsync();
-                    productVM = await JsonSerializer
-                        .DeserializeAsync<ProductViewModel>(apiResponse, _options);
-                }
-                else
-                {
-                    return null;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var apiResponse = await response.Content.ReadAsStreamAsync();
+                        var createdProduct = await JsonSerializer
+                            .DeserializeAsync<ProductViewModel>(apiResponse, _options);
+                        return createdProduct;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
-            return productVM;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao criar produto: {ex.Message}");
+                return null;
+            }
         }
-
 
         public async Task<ProductViewModel> UpdateProduct(ProductViewModel productVM)
         {
-            var client = _clientFactory.CreateClient("ProductApi");
-            ProductViewModel productUpdated = new ProductViewModel();
-
-            using (var response = await client.PutAsJsonAsync(apiEndpoint, productsVM))
+            try
             {
-                if (response.IsSuccessStatusCode)
+                var client = _clientFactory.CreateClient("ProductApi");
+                StringContent content = new StringContent(JsonSerializer.Serialize(productVM),
+                                        Encoding.UTF8, "application/json");
+
+                using (var response = await client.PutAsync(apiEndpoint + productVM.Id, content))
                 {
-                    var apiResponse = await response.Content.ReadAsStreamAsync();
-                    productUpdated = await JsonSerializer
-                        .DeserializeAsync<ProductViewModel>(apiResponse, _options);
-                }
-                else
-                {
-                    return null;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var apiResponse = await response.Content.ReadAsStreamAsync();
+                        var productUpdated = await JsonSerializer
+                            .DeserializeAsync<ProductViewModel>(apiResponse, _options);
+                        return productUpdated;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
-            return productUpdated;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao atualizar produto: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<bool> DeleteProductById(int id)
         {
-            var client = _clientFactory.CreateClient("ProductApi");
-            using (var response = await client.DeleteAsync(apiEndpoint + id))
+            try
             {
-                if (response.IsSuccessStatusCode)
+                var client = _clientFactory.CreateClient("ProductApi");
+                using (var response = await client.DeleteAsync(apiEndpoint + id))
                 {
-                    return true;
+                    return response.IsSuccessStatusCode;
                 }
             }
-            return false;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao deletar produto: {ex.Message}");
+                return false;
+            }
         }
     }
 }
-

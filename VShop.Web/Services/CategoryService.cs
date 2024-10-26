@@ -18,22 +18,31 @@ namespace VShop.Web.Services
 
         public async Task<IEnumerable<CategoryViewModel>> GetAllCategories()
         {
-            var client = _clientFactory.CreateClient("ProductApi");
-
-            IEnumerable<CategoryViewModel> categories;
-            var response = await client.GetAsync(apiEndpoint);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var apiResponse = await response.Content.ReadAsStreamAsync();
-                categories = await JsonSerializer.DeserializeAsync<IEnumerable<CategoryViewModel>>(apiResponse, _options);
+                var client = _clientFactory.CreateClient("ProductApi");
 
+                IEnumerable<CategoryViewModel> categories;
+                var response = await client.GetAsync(apiEndpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadAsStreamAsync();
+                    categories = await JsonSerializer.DeserializeAsync<IEnumerable<CategoryViewModel>>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+
+                return categories;
             }
-            else
+            catch (Exception ex)
             {
+                // Log de erro, por exemplo:
+                Console.WriteLine($"Erro ao obter categorias: {ex.Message}");
                 return null;
             }
-            return categories;
         }
     }
 }
-
