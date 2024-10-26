@@ -43,9 +43,9 @@ namespace VShop.IdentityServer.Configuration
                 {
                     ClientId = "vshop",
                     ClientSecrets = { new Secret("tata#tata".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Code, // Via código
-                    RedirectUris = { "https://localhost:7281/signin-oidc" }, // Login
-                    PostLogoutRedirectUris = { "https://localhost:7281/signout-callback-oidc" }, // Logout
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RedirectUris = { "https://localhost:7281/signin-oidc" }, // Esta URI deve ser onde seu aplicativo está escutando
+                    PostLogoutRedirectUris = { "https://localhost:7281/signout-callback-oidc" },
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -54,6 +54,8 @@ namespace VShop.IdentityServer.Configuration
                         "vshop"
                     }
                 }
+
             };
+
     }
 }

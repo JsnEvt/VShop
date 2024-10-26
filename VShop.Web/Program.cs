@@ -35,6 +35,11 @@ builder.Services.AddAuthentication(options =>
       options.TokenValidationParameters.RoleClaimType = "role";
       options.Scope.Add("vshop");
       options.SaveTokens = true;
+      options.Scope.Add("openid");
+      options.Scope.Add("profile");
+      options.Scope.Add("email");
+      options.Scope.Add("vshop");
+      options.CallbackPath = "/signin-oidc"; // URI de redirecionamento após login
   }
 );
 
