@@ -5,7 +5,7 @@ namespace VShop.IdentityServer.Configuration
 {
     public class IdentityConfiguration
     {
-        //definindo os recursos, os escopos e os clientes do IdentityServer
+        // Definindo os recursos, os escopos e os clientes do IdentityServer
         public const string Admin = "Admin";
         public const string Client = "Client";
 
@@ -20,8 +20,8 @@ namespace VShop.IdentityServer.Configuration
         public static IEnumerable<ApiScope> ApiScopes =>
             new List<ApiScope>
             {
-                //vshop e a aplicacao web que vai acessar
-                //o IdentityServer para obter o token
+                // VShop é a aplicação web que vai acessar
+                // o IdentityServer para obter o token
                 new ApiScope("vshop", "VShop Server"),
                 new ApiScope(name: "read", "Read data."),
                 new ApiScope(name: "write", "Write data."),
@@ -31,21 +31,21 @@ namespace VShop.IdentityServer.Configuration
         public static IEnumerable<Client> Clients =>
             new List<Client>
             {
-                //cliente generico
+                // Cliente genérico
                 new Client
                 {
                     ClientId = "client",
                     ClientSecrets = { new Secret("tata#tata".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.ClientCredentials, //precisa das credenciais do usuario
+                    AllowedGrantTypes = GrantTypes.ClientCredentials, // Precisa das credenciais do usuário
                     AllowedScopes = { "read", "write", "profile" }
                 },
                 new Client
                 {
                     ClientId = "vshop",
                     ClientSecrets = { new Secret("tata#tata".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Code, //via codigo
-                    RedirectUris = { "https://locahost:7281/signin-oidc" }, //login
-                    PostLogoutRedirectUris = { "https://localhost:7281/signout-callback-oidc" }, //logout
+                    AllowedGrantTypes = GrantTypes.Code, // Via código
+                    RedirectUris = { "https://localhost:7281/signin-oidc" }, // Login
+                    PostLogoutRedirectUris = { "https://localhost:7281/signout-callback-oidc" }, // Logout
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -55,5 +55,5 @@ namespace VShop.IdentityServer.Configuration
                     }
                 }
             };
-            }
+    }
 }
