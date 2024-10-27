@@ -5,12 +5,12 @@
 namespace VShop.ProductApi.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedProducts : Migration
+    public partial class dbvshopnovo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder mb)
         {
-            mb.Sql("Insert into Products(Name, Price, Description, Stock, ImageUrl, CategoryId) " + 
+            mb.Sql("Insert into Products(Name, Price, Description, Stock, ImageUrl, CategoryId) " +
                 "Values('Caderno', 20, 'Caderno_simples', 10, 'caderno1.jgp', 1)");
             mb.Sql("Insert into Products(Name, Price, Description, Stock, ImageUrl, CategoryId) " +
                 "Values('Lapis', 5, 'Lapis_preto', 20, 'lapis1.jgp', 1)");

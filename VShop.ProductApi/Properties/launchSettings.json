@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ProductApi": {
+    "VShop.ProductApi": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
