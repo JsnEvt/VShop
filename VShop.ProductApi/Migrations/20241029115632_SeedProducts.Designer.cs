@@ -11,7 +11,7 @@ using VShop.ProductApi.Context;
 namespace VShop.ProductApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240924185828_SeedProducts")]
+    [Migration("20241029115632_SeedProducts")]
     partial class SeedProducts
     {
         /// <inheritdoc />

@@ -11,8 +11,8 @@ using VShop.ProductApi.Context;
 namespace VShop.ProductApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241026220433_dbvshopnovo")]
-    partial class dbvshopnovo
+    [Migration("20241029114902_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
