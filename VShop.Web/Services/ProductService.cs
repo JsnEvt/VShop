@@ -22,19 +22,17 @@ namespace VShop.Web.Services
             try
             {
                 var client = _clientFactory.CreateClient("ProductApi");
-                using (var response = await client.GetAsync(apiEndpoint))
+                var response = await client.GetAsync(apiEndpoint);
                 {
                     if (response.IsSuccessStatusCode)
                     {
-                        var apiResponse = await response.Content.ReadAsStreamAsync();
+                        using var apiResponse = await response.Content.ReadAsStreamAsync();
                         var productsVM = await JsonSerializer
                             .DeserializeAsync<IEnumerable<ProductViewModel>>(apiResponse, _options);
                         return productsVM;
                     }
-                    else
-                    {
-                        return Enumerable.Empty<ProductViewModel>();
-                    }
+
+                    return Enumerable.Empty<ProductViewModel>();
                 }
             }
             catch (Exception ex)

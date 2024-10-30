@@ -27,6 +27,7 @@ namespace VShop.Web.Controllers
                 var result = await _productService.GetAllProducts();
                 if (result is null)
                     return View("Error");
+                Console.WriteLine("cade os resultados?");
 
                 return View(result);
             }

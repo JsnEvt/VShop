@@ -53,7 +53,7 @@ builder.Services.AddSwaggerGen(c => {
 
 
 //builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
-var mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+var mySqlConnection = builder.Configuration.GetConnectionString("ConnectionStrings:DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
