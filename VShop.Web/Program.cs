@@ -1,9 +1,15 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using VShop.ProductApi.Context;
 using VShop.Web.Services;
 using VShop.Web.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -60,7 +66,7 @@ builder.Services.AddAuthentication(options =>
       options.Scope.Add("profile");
       options.Scope.Add("email");
       options.Scope.Add("vshop");
-      options.CallbackPath = "/signin-oidc"; // URI de redirecionamento após login
+      options.CallbackPath = "/signin-oidc"; // URI de redirecionamento apï¿½s login
   }
 );
 
